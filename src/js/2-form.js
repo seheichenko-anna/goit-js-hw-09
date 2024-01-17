@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'formData';
+const STORAGE_KEY = 'feedback-form-state';
 
 const form = document.querySelector('.feedback-form');
 
@@ -7,8 +7,8 @@ form.addEventListener('submit', onFormSubmit);
 
 function onFormInput() {
   const data = {
-    message: form.elements.message.value,
-    email: form.elements.email.value,
+    message: form.elements.message.value.trim(),
+    email: form.elements.email.value.trim(),
   };
 
   saveToLS(STORAGE_KEY, data);
@@ -16,8 +16,19 @@ function onFormInput() {
 
 function onFormSubmit(evt) {
   evt.preventDefault();
-  localStorage.removeItem(STORAGE_KEY);
-  form.reset();
+  const email = form.elements.email.value.trim();
+  const message = form.elements.message.value.trim();
+  if (email !== '' && message !== '') {
+    const data = {
+      email,
+      message,
+    };
+    console.log(data);
+    localStorage.removeItem(STORAGE_KEY);
+    form.reset();
+  } else {
+    alert('All form fields must be filled in');
+  }
 }
 
 function saveToLS(key, value) {
